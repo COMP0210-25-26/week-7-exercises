@@ -1,4 +1,4 @@
-#include "Summing.h"
+#include "CompensatedSum.h"
 #include <iostream>
 #include <vector> 
 #include <chrono>
