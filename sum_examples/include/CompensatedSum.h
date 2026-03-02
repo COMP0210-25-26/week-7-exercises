@@ -1,25 +1,24 @@
 #pragma once
 
 // x86 with AVX
-//#define USE_AVX
+#define USE_AVX 0
 
 // x86 without AVX
-#define USE_X64_NOAVX
+#define USE_X64_NOAVX 1
 
 // ARM
-//#define USE_ARM
+#define USE_ARM 0
 
-
-#ifdef USE_X64_NOAVX
+#if USE_X64_NOAVX
 #include <xmmintrin.h>
 #endif
 
-#ifdef USE_AVX
+#if USE_AVX
 #include <immintrin.h>
 #endif
 
 
-#ifdef USE_ARM
+#if USE_ARM
 #include <arm_neon.h>
 #endif
 
@@ -56,7 +55,7 @@ FPtype Kahan_sum(const vector<FPtype> &vals)
 }
 
 //x86 with AVX
-#ifdef USE_AVX
+#if USE_AVX
     const size_t W = 8;
     using VEC = __m256;
     inline VEC SET_ZERO() { return _mm256_setzero_ps(); }
@@ -67,7 +66,7 @@ FPtype Kahan_sum(const vector<FPtype> &vals)
 #endif 
 
 //x86 without AVX
-#ifdef USE_X64_NOAVX
+#if USE_X64_NOAVX
     const size_t W = 4;
     using VEC = __m128;
     inline VEC SET_ZERO() { return _mm_setzero_ps(); }
@@ -78,7 +77,7 @@ FPtype Kahan_sum(const vector<FPtype> &vals)
 #endif
 
 //ARM
-#ifdef USE_ARM
+#if USE_ARM
     const size_t W = 4;
     using VEC = float32x4_t;
     inline VEC SET_ZERO() { return vdupq_n_f32(0); }
@@ -88,6 +87,7 @@ FPtype Kahan_sum(const vector<FPtype> &vals)
     inline void STORE(float* p, VEC a) { return vst1q_f32(p, a); }
 #endif
 
+#if USE_AVX || USE_X64_NOAVX || USE_ARM
 // SIMD Kahan
 // size of vals should be multiple of W; can be padded with 0s at the end
 // better if vals is appropriately aligned
@@ -116,3 +116,4 @@ float SIMD_sum(const float *vals, const size_t N)
 
     return tot_sum;
 }
+#endif 
