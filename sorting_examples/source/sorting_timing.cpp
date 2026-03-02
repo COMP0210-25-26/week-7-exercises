@@ -3,9 +3,9 @@
 #include <iostream>
 #include <random>
 
-typedef std::chrono::high_resolution_clock myClock;
+typedef std::chrono::high_resolution_clock timingClock;
 
-double t_seconds(std::chrono::time_point<myClock> t1, std::chrono::time_point<myClock> t2)
+double t_seconds(std::chrono::time_point<timingClock> t1, std::chrono::time_point<timingClock> t2)
 {
     return (t2 - t1).count() / 1e9;
 }
