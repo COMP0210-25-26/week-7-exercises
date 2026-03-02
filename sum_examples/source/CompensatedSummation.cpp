@@ -6,9 +6,9 @@
 
 using std::vector;
 
-typedef std::chrono::high_resolution_clock myClock;
+typedef std::chrono::high_resolution_clock timingClock;
 
-double t_seconds(std::chrono::time_point<myClock> t1, std::chrono::time_point<myClock> t2)
+double t_seconds(std::chrono::time_point<timingClock> t1, std::chrono::time_point<timingClock> t2)
 {
     return (t2 - t1).count() / 1e9;
 }
@@ -31,17 +31,17 @@ int main()
 
     float triv = trivial_sum(v);
 
-    auto tk1 = myClock::now();
+    auto tk1 = timingClock::now();
     float k = Kahan_sum(v);
-    auto tk2 = myClock::now();
+    auto tk2 = timingClock::now();
 
-    auto ts1 = myClock::now();
+    auto ts1 = timingClock::now();
     float S = SIMD_sum(xs, N);
-    auto ts2 = myClock::now();
+    auto ts2 = timingClock::now();
 
-    auto tl1 = myClock::now();
+    auto tl1 = timingClock::now();
     float STD = std::accumulate(v.begin(), v.end(), 0.0f);
-    auto tl2 = myClock::now();
+    auto tl2 = timingClock::now();
 
     printf("trivial sum = %f, Kahan sum = %f, SIMD sum = %f; expected 160.0\n", triv, k, S);
 
