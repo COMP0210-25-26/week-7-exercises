@@ -1,15 +1,27 @@
-#ifndef SUMMING_H
-#define SUMMING_H
-
-// x86 without AVX
-//    #include <xmmintrin.h>
+#pragma once
 
 // x86 with AVX
-    #include <immintrin.h>
+//#define USE_AVX
+
+// x86 without AVX
+#define USE_X64_NOAVX
 
 // ARM
-//    #include <arm_neon.h>
+//#define USE_ARM
 
+
+#ifdef USE_X64_NOAVX
+#include <xmmintrin.h>
+#endif
+
+#ifdef USE_AVX
+#include <immintrin.h>
+#endif
+
+
+#ifdef USE_ARM
+#include <arm_neon.h>
+#endif
 
 #include <vector>
 #include <iostream>
@@ -44,6 +56,7 @@ FPtype Kahan_sum(const vector<FPtype> &vals)
 }
 
 //x86 with AVX
+#ifdef USE_AVX
     const size_t W = 8;
     using VEC = __m256;
     inline VEC SET_ZERO() { return _mm256_setzero_ps(); }
@@ -51,25 +64,29 @@ FPtype Kahan_sum(const vector<FPtype> &vals)
     inline VEC SUB(VEC a, VEC b) { return _mm256_sub_ps(a, b); }
     inline VEC LOAD(const float *p) { return _mm256_load_ps(p); }
     inline void STORE(float* p, VEC a) { return _mm256_store_ps(p, a); }
+#endif 
 
 //x86 without AVX
-//    const size_t W = 4;
-//    using VEC = __m128;
-//    inline VEC SET_ZERO() { return _mm_setzero_ps(); }
-//    inline VEC ADD(VEC a, VEC b) { return _mm_add_ps(a, b); }
-//    inline VEC SUB(VEC a, VEC b) { return _mm_sub_ps(a, b); }
-//    inline VEC LOAD(const float *p) { return _mm_load_ps(p); }
-//    inline void STORE(float* p, VEC a) { return _mm_store_ps(p, a); }
+#ifdef USE_X64_NOAVX
+    const size_t W = 4;
+    using VEC = __m128;
+    inline VEC SET_ZERO() { return _mm_setzero_ps(); }
+    inline VEC ADD(VEC a, VEC b) { return _mm_add_ps(a, b); }
+    inline VEC SUB(VEC a, VEC b) { return _mm_sub_ps(a, b); }
+    inline VEC LOAD(const float *p) { return _mm_load_ps(p); }
+    inline void STORE(float* p, VEC a) { return _mm_store_ps(p, a); }
+#endif
 
 //ARM
-//    const size_t W = 4;
-//    using VEC = float32x4_t;
-//    inline VEC SET_ZERO() { return vdupq_n_f32(0); }
-//    inline VEC ADD(VEC a, VEC b) { return vaddq_f32(a, b); }
-//    inline VEC SUB(VEC a, VEC b) { return vsubq_f32(a, b); }
-//    inline VEC LOAD(const float *p) { return vld1q_f32(p); }
-//    inline void STORE(float* p, VEC a) { return vst1q_f32(p, a); }
-
+#ifdef USE_ARM
+    const size_t W = 4;
+    using VEC = float32x4_t;
+    inline VEC SET_ZERO() { return vdupq_n_f32(0); }
+    inline VEC ADD(VEC a, VEC b) { return vaddq_f32(a, b); }
+    inline VEC SUB(VEC a, VEC b) { return vsubq_f32(a, b); }
+    inline VEC LOAD(const float *p) { return vld1q_f32(p); }
+    inline void STORE(float* p, VEC a) { return vst1q_f32(p, a); }
+#endif
 
 // SIMD Kahan
 // size of vals should be multiple of W; can be padded with 0s at the end
@@ -99,5 +116,3 @@ float SIMD_sum(const float *vals, const size_t N)
 
     return tot_sum;
 }
-
-#endif
