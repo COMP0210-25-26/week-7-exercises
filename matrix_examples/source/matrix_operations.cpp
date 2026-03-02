@@ -43,13 +43,13 @@ int main()
     rowMajor_by_rowMajor_flat(matrixA, matrixB, matrixC, N);
     auto t2 = timingClock::now();
 
-    std::cout << "t row major = " << t_seconds(t1, t2) << std::endl;
+    std::cout << "time to multiply row major by row major = " << t_seconds(t1, t2) <<  "s" << std::endl;
 
     t1 = timingClock::now();
     rowMajor_by_colMajor_flat(matrixA, matrixB, matrixC, N);
     t2 = timingClock::now();
 
-    std::cout << "t col major = " << t_seconds(t1, t2) << std::endl;
+    std::cout << "time to multiply row major by column major = " << t_seconds(t1, t2) << "s" << std::endl;
 
 
     return 0;
