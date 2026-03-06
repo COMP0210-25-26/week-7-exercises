@@ -1,5 +1,13 @@
 #include <vector>
 
+/**
+ * @brief Merges two sorted lists (auxilliary function for merge-srot)
+ * 
+ * @tparam T: sortable element type
+ * @param v1: sorted list
+ * @param v2: sorted list
+ * @return std::vector<T>: sorted merged list 
+ */
 template<typename T>
 std::vector<T> merge(const std::vector<T> &v1, const std::vector<T> &v2)
 {
@@ -33,6 +41,13 @@ std::vector<T> merge(const std::vector<T> &v1, const std::vector<T> &v2)
     return v_merged;
 }
 
+/**
+ * @brief Out of place sort using merge-sort algorithm.
+ * 
+ * @tparam T: sortable element type
+ * @param v: unsorted input list
+ * @return std::vector<T>: sorted list
+ */
 template<typename T>
 std::vector<T> merge_sort(const std::vector<T> &v)
 {
@@ -49,7 +64,13 @@ std::vector<T> merge_sort(const std::vector<T> &v)
     }
 }
 
-
+/**
+ * @brief Insert in place an element into a sorted list
+ * 
+ * @tparam T: sortable element type
+ * @param v_sorted: sorted list; modified by function
+ * @param val: new element
+ */
 template <typename T>
 void insert(std::vector<T> &v_sorted, const T &val)
 {
@@ -66,6 +87,13 @@ void insert(std::vector<T> &v_sorted, const T &val)
     return;
 }
 
+/**
+ * @brief Sort a list out of place by insertion sort method
+ * 
+ * @tparam T: sortable element type
+ * @param v: unsorted input list
+ * @return std::vector<T>: sorted list
+ */
 template<typename T>
 std::vector<T> insertion_sort(const std::vector<T> &v)
 {
